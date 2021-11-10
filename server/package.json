@@ -1,0 +1,33 @@
+{
+  "type": "module",
+  "name": "server",
+  "version": "1.0.0",
+  "description": "trustIQ test restful api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ridhotamma/trustIQ-test.git"
+  },
+  "keywords": [
+    "restful",
+    "api",
+    "TrustIQ",
+    "test",
+    "interview"
+  ],
+  "author": "Ridho Tamma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ridhotamma/trustIQ-test/issues"
+  },
+  "homepage": "https://github.com/ridhotamma/trustIQ-test#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.12"
+  }
+}
