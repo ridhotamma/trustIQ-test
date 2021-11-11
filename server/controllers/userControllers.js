@@ -38,10 +38,10 @@ export const deleteUser = (req, res) => {
 export const updateUser = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
-      user.name = req.params.name;
-      user.NIP = req.params.NIP;
-      user.no_tlp = req.params.no_tlp;
-      user.email = req.params.email;
+      user.name = req.body.name;
+      user.NIP = req.body.NIP;
+      user.no_tlp = req.body.no_tlp;
+      user.email = req.body.email;
 
       user
         .save()
