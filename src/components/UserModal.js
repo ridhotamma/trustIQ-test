@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -51,7 +51,12 @@ const UserModal = ({
   updateUser,
 }) => {
   const classes = useStyles();
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({
+    name: user?.name,
+    NIP: user?.NIP,
+    no_tlp: user?.no_tlp,
+    email: user?.email,
+  });
 
   const handleSubmit = () => {
     setOpenAlert(true);
@@ -62,20 +67,17 @@ const UserModal = ({
 
   const handleSubmitUpdate = (id) => {
     const newUser = {
-      name: user?.name,
-      NIP: user?.NIP,
-      no_tlp: user?.no_tlp,
-      email: user?.email,
+      name: userData?.name,
+      NIP: userData?.NIP,
+      no_tlp: userData?.no_tlp,
+      email: userData?.email,
     };
     setOpenAlert(true);
-    console.log("user baru", newUser);
     updateUser(id, newUser);
     setOpen(false);
-  };
 
-  useEffect(() => {
-    console.log(user?.name);
-  }, []);
+    console.log(id);
+  };
 
   return (
     <React.Fragment>
@@ -94,7 +96,7 @@ const UserModal = ({
               fullWidth
               className={classes.item}
               onChange={(e) =>
-                setUserData({ ...userData, name: e.target.value })
+                setUserData({ ...userData, name: e.target.value || user.name })
               }
             />
             <TextField
@@ -106,7 +108,7 @@ const UserModal = ({
               className={classes.item}
               defaultValue={user?.NIP}
               onChange={(e) =>
-                setUserData({ ...userData, NIP: e.target.value })
+                setUserData({ ...userData, NIP: e.target.value || user.NIP })
               }
             />
             <TextField
@@ -118,7 +120,10 @@ const UserModal = ({
               fullWidth
               className={classes.item}
               onChange={(e) =>
-                setUserData({ ...userData, no_tlp: e.target.value })
+                setUserData({
+                  ...userData,
+                  no_tlp: e.target.value || user.no_tlp,
+                })
               }
             />
             <TextField
@@ -130,7 +135,10 @@ const UserModal = ({
               defaultValue={user?.email}
               className={classes.item}
               onChange={(e) =>
-                setUserData({ ...userData, email: e.target.value })
+                setUserData({
+                  ...userData,
+                  email: e.target.value || user.email,
+                })
               }
             />
             <div className={classes.item}>
@@ -142,7 +150,7 @@ const UserModal = ({
                   inUpdate ? () => handleSubmitUpdate(user._id) : handleSubmit
                 }
               >
-                Create
+                {inUpdate ? "Update" : "Create"}
               </Button>
               <Button
                 variant="outlined"

@@ -1,13 +1,13 @@
-import { CHANGE_SEARCH_FIELD } from "./actions";
-
-const initialStateSearch = {
-  searchField: "",
-};
-
-export const searchUsers = (state = initialStateSearch, action = {}) => {
+export const Reducers = (state, action) => {
   switch (action.type) {
-    case CHANGE_SEARCH_FIELD:
-      return Object.assign({}, state, { searchField: action.payload });
+    case "CHANGE_SEARCH_FIELD":
+      return { ...state, searchTerm: action.payload };
+    case "CHANGE_OPTION_FIELD":
+      return { ...state, optionTerm: action.payload };
+    case "RESET_SEARCH_FIELD":
+      return { ...state, searchTerm: "" };
+    case "RESET_OPTION_FIELD":
+      return { ...state, optionTerm: "" };
     default:
       return state;
   }

@@ -9,7 +9,9 @@ import {
   Box,
   FormControl,
 } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
+import { useContext } from "react";
+import { Context } from "../Context";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -21,14 +23,18 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   button: {
-    width: "20%",
-    marginLeft: theme.spacing(2),
+    width: "10%",
+    marginLeft: theme.spacing(1),
   },
 }));
 
 const SearchBox = () => {
+  const { dispatch, searchTerm, optionTerm } = useContext(Context);
   const classes = useStyles();
-  const [searchBy, setSearchBy] = React.useState("");
+
+  useEffect(() => {
+    console.log(searchTerm, optionTerm);
+  }, [searchTerm, optionTerm]);
 
   const selectOptions = {
     name: "name",
@@ -40,7 +46,13 @@ const SearchBox = () => {
   const { name, nip, noTelp, email } = selectOptions;
 
   const handleSelect = (event) => {
-    setSearchBy(event.target.value);
+    dispatch({ type: "CHANGE_OPTION_FIELD", payload: event.target.value });
+    console.log(optionTerm);
+  };
+
+  const resetForm = () => {
+    dispatch({ type: "RESET_SEARCH_FIELD" });
+    dispatch({ type: "RESET_OPTION_FIELD" });
   };
   return (
     <React.Fragment>
@@ -50,6 +62,10 @@ const SearchBox = () => {
           label="Search..."
           variant="outlined"
           className={classes.input}
+          value={searchTerm}
+          onChange={(e) =>
+            dispatch({ type: "CHANGE_SEARCH_FIELD", payload: e.target.value })
+          }
         />
 
         <Box sx={{ minWidth: 120 }}>
@@ -58,7 +74,7 @@ const SearchBox = () => {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={searchBy}
+              value={optionTerm}
               label="searchBy"
               onChange={handleSelect}
             >
@@ -69,8 +85,13 @@ const SearchBox = () => {
             </Select>
           </FormControl>
         </Box>
-        <Button variant="outlined" className={classes.button}>
-          Search
+        <Button
+          variant="outlined"
+          color="secondary"
+          className={classes.button}
+          onClick={resetForm}
+        >
+          Reset
         </Button>
       </Container>
     </React.Fragment>

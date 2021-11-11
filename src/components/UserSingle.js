@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     width: "100px",
     height: "100px",
+    backgroundColor: "lightblue",
   },
   cardContent: {
     display: "flex",
@@ -61,12 +62,12 @@ const UserSingle = ({ user, deleteUser, updateUser }) => {
   return (
     <React.Fragment>
       <Paper>
-        <Card className={classes.card} variant="contained">
+        <Card className={classes.card}>
           <div>
             <CardContent className={classes.cardContent}>
               <Avatar
                 alt="Remy Sharp"
-                src="https://mui.com/static/images/avatar/1.jpg"
+                src={`https://robohash.org/${user._id}?size=200x200`}
                 className={classes.avatar}
               />
               <div className={classes.textWrapper}>
