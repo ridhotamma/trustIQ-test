@@ -1,1 +1,2 @@
 GET http://localhost:5000/api/users
+GET http://localhost:5000/api/user/618b6f507a0330788d48b08a
