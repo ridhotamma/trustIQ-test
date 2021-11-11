@@ -40,7 +40,16 @@ const Alert = (props) => {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 };
 
-const UserModal = ({ open, setOpen, openAlert, handleClose, setOpenAlert }) => {
+const UserModal = ({
+  open,
+  setOpen,
+  openAlert,
+  handleClose,
+  setOpenAlert,
+  inUpdate,
+  user,
+  updateUser,
+}) => {
   const classes = useStyles();
   const [userData, setUserData] = useState({});
 
@@ -51,20 +60,37 @@ const UserModal = ({ open, setOpen, openAlert, handleClose, setOpenAlert }) => {
     setOpen(false);
   };
 
-  useEffect(() => {}, []);
+  const handleSubmitUpdate = (id) => {
+    const newUser = {
+      name: user?.name,
+      NIP: user?.NIP,
+      no_tlp: user?.no_tlp,
+      email: user?.email,
+    };
+    setOpenAlert(true);
+    console.log("user baru", newUser);
+    updateUser(id, newUser);
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    console.log(user?.name);
+  }, []);
+
   return (
     <React.Fragment>
       <Modal open={open}>
         <Container className={classes.container}>
           <form className={classes.form} autoComplete="off">
             <Typography variant="h5" className={classes.item}>
-              Tambah User Baru
+              {inUpdate ? "Update User" : "Tambah User Baru"}
             </Typography>
             <TextField
               required
               id="filled-required"
               label="Nama"
               variant="filled"
+              defaultValue={user?.name}
               fullWidth
               className={classes.item}
               onChange={(e) =>
@@ -78,6 +104,7 @@ const UserModal = ({ open, setOpen, openAlert, handleClose, setOpenAlert }) => {
               variant="filled"
               fullWidth
               className={classes.item}
+              defaultValue={user?.NIP}
               onChange={(e) =>
                 setUserData({ ...userData, NIP: e.target.value })
               }
@@ -87,6 +114,7 @@ const UserModal = ({ open, setOpen, openAlert, handleClose, setOpenAlert }) => {
               id="filled-required"
               label="Nomor Telpon"
               variant="filled"
+              defaultValue={user?.no_tlp}
               fullWidth
               className={classes.item}
               onChange={(e) =>
@@ -99,6 +127,7 @@ const UserModal = ({ open, setOpen, openAlert, handleClose, setOpenAlert }) => {
               label="Alamat Email"
               variant="filled"
               fullWidth
+              defaultValue={user?.email}
               className={classes.item}
               onChange={(e) =>
                 setUserData({ ...userData, email: e.target.value })
@@ -109,7 +138,9 @@ const UserModal = ({ open, setOpen, openAlert, handleClose, setOpenAlert }) => {
                 variant="outlined"
                 color="primary"
                 style={{ marginRight: 20 }}
-                onClick={handleSubmit}
+                onClick={
+                  inUpdate ? () => handleSubmitUpdate(user._id) : handleSubmit
+                }
               >
                 Create
               </Button>
@@ -131,7 +162,7 @@ const UserModal = ({ open, setOpen, openAlert, handleClose, setOpenAlert }) => {
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       >
         <Alert onClose={handleClose} severity="success">
-          This is a success message!
+          {inUpdate ? "User berhasil di Update!" : "User Berhasil dibuat"}
         </Alert>
       </Snackbar>
     </React.Fragment>

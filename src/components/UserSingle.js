@@ -8,8 +8,8 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { Delete, Edit } from "@material-ui/icons";
-import React from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import UserModal from "./UserModal";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -47,6 +47,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserSingle = ({ user, deleteUser, updateUser }) => {
+  const [open, setOpen] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenAlert(false);
+  };
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -74,7 +84,7 @@ const UserSingle = ({ user, deleteUser, updateUser }) => {
             </CardContent>
           </div>
           <div>
-            <IconButton color="inherit" onClick={() => updateUser(user._id)}>
+            <IconButton color="inherit" onClick={() => setOpen(true)}>
               <Edit />
             </IconButton>
             <IconButton color="inherit" onClick={() => deleteUser(user._id)}>
@@ -83,6 +93,16 @@ const UserSingle = ({ user, deleteUser, updateUser }) => {
           </div>
         </Card>
       </Paper>
+      <UserModal
+        open={open}
+        setOpen={setOpen}
+        openAlert={openAlert}
+        handleClose={handleClose}
+        setOpenAlert={setOpenAlert}
+        inUpdate={true}
+        user={user}
+        updateUser={updateUser}
+      />
     </React.Fragment>
   );
 };
