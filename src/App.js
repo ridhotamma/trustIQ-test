@@ -1,11 +1,16 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
+import SearchBox from "./components/SearchBox";
+import UserList from "./components/UserList";
 
 function App() {
   return (
     <React.Fragment>
-      <h1>user List</h1>
+      <Navbar />
+      <SearchBox />
+      <UserList />
+      <Footer />
     </React.Fragment>
   );
 }
