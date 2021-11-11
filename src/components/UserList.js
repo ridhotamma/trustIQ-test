@@ -1,109 +1,47 @@
-import {
-  Card,
-  CardContent,
-  Container,
-  Typography,
-  Avatar,
-  makeStyles,
-  Paper,
-  IconButton,
-} from "@material-ui/core";
-
-import { Delete, Edit } from "@material-ui/icons";
-
+import { Container, makeStyles } from "@material-ui/core";
+import { request } from "../utils";
 import React, { useState, useEffect } from "react";
+import UserSingle from "./UserSingle";
 import axios from "axios";
-
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: theme.spacing(2),
-  },
-  card: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: theme.spacing(2),
-    backgroundColor: theme.palette.secondary.dark,
-    color: "white",
-    padding: theme.spacing(3),
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column",
-      padding: theme.spacing(2),
-    },
-  },
-  avatar: {
-    width: "100px",
-    height: "100px",
-  },
-  cardContent: {
-    display: "flex",
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-  },
-  textWrapper: {
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(2),
-    },
-    [theme.breakpoints.down("sm")]: {
-      textAlign: "center",
-      marginTop: theme.spacing(2),
-    },
   },
 }));
 
 const UserList = () => {
   const classes = useStyles();
   const [users, setUsers] = useState([]);
+  const [updated, setUpdated] = useState(true);
 
   useEffect(() => {
-    const request = async (url) => {
-      const response = await axios.get(url);
-      await setUsers(response.data);
-    };
+    request.getUsers("http://localhost:5000/api/users", setUsers);
+  }, [users]);
 
-    request("http://localhost:5000/api/users");
-  }, []);
+  const deleteUser = (id) => {
+    axios.delete("http://localhost:5000/api/user/" + id);
+  };
 
+  const updateUser = (id) => {
+    console.log(id);
+    axios
+      .put("http://localhost:5000/api/user/" + id, {
+        name: "ririn",
+        NIP: "334",
+        no_tlp: "0098",
+        email: "ririn@gmail.com",
+      })
+      .then((res) => console.log(res));
+  };
   return (
     <React.Fragment>
       <Container className={classes.container}>
         {users?.results?.map((user) => (
-          <Paper>
-            <Card className={classes.card} variant="contained">
-              <div>
-                <CardContent className={classes.cardContent}>
-                  <Avatar
-                    alt="Remy Sharp"
-                    src="https://mui.com/static/images/avatar/1.jpg"
-                    className={classes.avatar}
-                  />
-                  <div className={classes.textWrapper}>
-                    <Typography gutterBottom variant="h6">
-                      {user.name}
-                    </Typography>
-                    <Typography gutterBottom>Nomor NIP : {user.NIP}</Typography>
-                    <Typography gutterBottom>
-                      Nomor Telepon : {user.no_tlp}
-                    </Typography>
-                    <Typography gutterBottom>
-                      Alamat Email : {user.email}
-                    </Typography>
-                  </div>
-                </CardContent>
-              </div>
-              <div>
-                <IconButton color="inherit">
-                  <Edit />
-                </IconButton>
-                <IconButton color="inherit">
-                  <Delete />
-                </IconButton>
-              </div>
-            </Card>
-          </Paper>
+          <UserSingle
+            user={user}
+            deleteUser={deleteUser}
+            updateUser={updateUser}
+          />
         ))}
       </Container>
     </React.Fragment>

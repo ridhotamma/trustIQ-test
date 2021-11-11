@@ -8,7 +8,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-import React from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,6 +42,16 @@ const Alert = (props) => {
 
 const UserModal = ({ open, setOpen, openAlert, handleClose, setOpenAlert }) => {
   const classes = useStyles();
+  const [userData, setUserData] = useState({});
+
+  const handleSubmit = () => {
+    setOpenAlert(true);
+    console.log(userData);
+    axios.post("http://localhost:5000/api/user/add", userData);
+    setOpen(false);
+  };
+
+  useEffect(() => {}, []);
   return (
     <React.Fragment>
       <Modal open={open}>
@@ -56,6 +67,9 @@ const UserModal = ({ open, setOpen, openAlert, handleClose, setOpenAlert }) => {
               variant="filled"
               fullWidth
               className={classes.item}
+              onChange={(e) =>
+                setUserData({ ...userData, name: e.target.value })
+              }
             />
             <TextField
               required
@@ -64,6 +78,9 @@ const UserModal = ({ open, setOpen, openAlert, handleClose, setOpenAlert }) => {
               variant="filled"
               fullWidth
               className={classes.item}
+              onChange={(e) =>
+                setUserData({ ...userData, NIP: e.target.value })
+              }
             />
             <TextField
               required
@@ -72,6 +89,9 @@ const UserModal = ({ open, setOpen, openAlert, handleClose, setOpenAlert }) => {
               variant="filled"
               fullWidth
               className={classes.item}
+              onChange={(e) =>
+                setUserData({ ...userData, no_tlp: e.target.value })
+              }
             />
             <TextField
               required
@@ -80,13 +100,16 @@ const UserModal = ({ open, setOpen, openAlert, handleClose, setOpenAlert }) => {
               variant="filled"
               fullWidth
               className={classes.item}
+              onChange={(e) =>
+                setUserData({ ...userData, email: e.target.value })
+              }
             />
             <div className={classes.item}>
               <Button
                 variant="outlined"
                 color="primary"
                 style={{ marginRight: 20 }}
-                onClick={() => setOpenAlert(true)}
+                onClick={handleSubmit}
               >
                 Create
               </Button>
