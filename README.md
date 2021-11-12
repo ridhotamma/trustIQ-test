@@ -9,6 +9,8 @@ Aplikasi frontend, minitest oleh trustIQ
 - Express JS
 - MongoDB
 
+link untuk backend : https://github.com/ridhotamma/trustIQ-test/tree/backend
+
 ## Screenshot aplikasi
 
 ![screenshot 1](./screenshot/ss1.png)
