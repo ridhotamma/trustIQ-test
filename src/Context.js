@@ -3,6 +3,8 @@ import { Reducers } from "./Reducers";
 const INITIAL_STATE = {
   searchTerm: "",
   optionTerm: "",
+  users: [],
+  newUsers: [],
 };
 
 export const Context = createContext(INITIAL_STATE);
@@ -14,6 +16,8 @@ export const ContextProvider = ({ children }) => {
       value={{
         searchTerm: state.searchTerm,
         optionTerm: state.optionTerm,
+        users: state.users,
+        newUsers: state.newUsers,
         dispatch,
       }}
     >

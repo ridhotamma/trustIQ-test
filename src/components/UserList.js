@@ -6,7 +6,6 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { request } from "../utils";
 import React, { useState, useEffect } from "react";
 import UserSingle from "./UserSingle";
 import axios from "axios";
@@ -21,43 +20,55 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserList = () => {
-  const [users, setUsers] = useState([]);
   const [page, setPage] = useState(parseInt(1));
   const [isSearching, setIsSearching] = useState(false);
-  const isLoading = users?.results?.length > 0 ? false : true;
-  const classes = useStyles(isLoading);
-  const { searchTerm, optionTerm } = useContext(Context);
-
-  const selectedUsers = users?.results?.filter((user) => {
-    return user?.NIP?.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  const { searchTerm, optionTerm, users, dispatch } = useContext(Context);
 
   useEffect(() => {
-    request.getUsers(
-      `http://localhost:5000/api/users?page=${page}&limit=5`,
-      setUsers
-    );
+    console.log(isSearching);
     if (searchTerm && optionTerm) {
       setIsSearching(true);
     } else if (!searchTerm && !optionTerm) {
       setIsSearching(false);
     }
-    // request.getUsers(`http://localhost:5000/api/users`, setUsers);
-  }, [users, isSearching]);
+
+    const url = !isSearching
+      ? `http://localhost:5000/api/users?page=${page}&limit=5`
+      : `http://localhost:5000/api/users`;
+
+    console.log(url);
+    fetch(url)
+      .then((response) => response.json())
+      .then((json) => dispatch({ type: "GET_USERS_DATA", payload: json }));
+
+    console.log(users);
+  }, [searchTerm, optionTerm, page]);
+
+  const selectedUsers = users?.results?.filter((user) => {
+    let searchUsers = user?.name;
+    if (optionTerm === "name") searchUsers = user?.name;
+    if (optionTerm === "nip") searchUsers = user?.NIP;
+    if (optionTerm === "noTelp") searchUsers = user?.no_tlp;
+    if (optionTerm === "email") searchUsers = user?.email;
+
+    return searchUsers?.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+  const isLoading = users?.results?.length > 0 ? false : true;
+  const classes = useStyles(isLoading, isSearching);
 
   const deleteUser = (id) => {
     axios.delete("http://localhost:5000/api/user/" + id);
-    setUsers((prevState) => prevState.filter(prevState._id !== id));
+    window.location.reload();
   };
 
   const updateUser = (id, newUser) => {
-    // console.log(id);
     axios.put("http://localhost:5000/api/user/" + id, {
       name: newUser.name,
       NIP: newUser.NIP,
       no_tlp: newUser.no_tlp,
       email: newUser.email,
     });
+    window.location.reload();
   };
 
   return (
@@ -110,7 +121,9 @@ const UserList = () => {
             {page === Math.ceil(users.total / 5) ? null : (
               <Button
                 variant="outlined"
-                onClick={() => setPage((prevPage) => prevPage + parseInt(1))}
+                onClick={() => {
+                  setPage((prevPage) => prevPage + parseInt(1));
+                }}
               >
                 halaman selanjutnya
               </Button>

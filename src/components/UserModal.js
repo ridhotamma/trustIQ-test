@@ -63,6 +63,7 @@ const UserModal = ({
     console.log(userData);
     axios.post("http://localhost:5000/api/user/add", userData);
     setOpen(false);
+    window.location.reload();
   };
 
   const handleSubmitUpdate = (id) => {
@@ -75,7 +76,7 @@ const UserModal = ({
     setOpenAlert(true);
     updateUser(id, newUser);
     setOpen(false);
-
+    window.location.reload();
     console.log(id);
   };
 

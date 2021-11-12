@@ -91,7 +91,7 @@ const SearchBox = () => {
           className={classes.button}
           onClick={resetForm}
         >
-          Reset
+          reset
         </Button>
       </Container>
     </React.Fragment>
